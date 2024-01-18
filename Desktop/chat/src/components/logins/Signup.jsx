@@ -11,8 +11,11 @@ import { Form, Formik } from "formik";
 import { useNavigate } from "react-router";
 import * as Yup from "yup";
 import TextField from "./TextField";
+import {AContext} from "../Context";
+import { useContext } from "react";
 
 const Signup = () => {
+  const {setUser} = useContext(AContext);
   const navigate = useNavigate();
   return (
     <Formik
@@ -38,18 +41,21 @@ const Signup = () => {
           },
           body: JSON.stringify(ele),
         })
-          .catch((err) => {
-            return;
-          })
           .then((res) => {
-            if (!res || res.ok || res.status >= 400) {
-              return;
+            if (!res.ok) {
+              throw new Error("Signup failed");
             }
             return res.json();
           })
           .then((data) => {
-            if (!data) return;
             console.log(data);
+            setUser({...data});
+            navigate("/home");
+
+          })
+          .catch((error) => {
+            console.error("Error during signup:", error);
+            // Handle the error or display a message to the user
           });
       }}
     >
