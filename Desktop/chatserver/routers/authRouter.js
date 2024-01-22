@@ -12,7 +12,7 @@ const bcrypt = require("bcrypt");
 router
 .route('/login')
 .get(async(req,res)=>{
-  if(req.session.user && req.session.username){
+  if(req.session.user && req.session.user.username){
     res.json({loggedIn:true,username:req.session.user.username})
   }else{
     res.json({loggedIn:false})
